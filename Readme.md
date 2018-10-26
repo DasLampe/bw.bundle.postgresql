@@ -1,9 +1,9 @@
 ## Sample config
 ```python
-'postgres': {
+'postgresql': {
     'role': {
         'me': {
-            'password': 'postgres_me_nodeName',
+            'password': 'postgresql_me_nodeName',
         },
     },
     'database': {

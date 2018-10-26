@@ -34,7 +34,7 @@ actions = {
 postgres_roles = {}
 for role,config in node.metadata.get('postgresql', {}).get('role', {}).items():
     postgres_roles[role] = {
-        'password': config.get('password', repo.vault.password_for('postgres_{}_{}'.format(role, node.name))),
+        'password': config.get('password', repo.vault.password_for('postgresql_{}_{}'.format(role, node.name))),
         'needs': [
             'pkg_yum:postgresql-server',
             'pkg_yum:postgresql-contrib',
