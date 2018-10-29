@@ -1,10 +1,8 @@
-pkg_yum = {
+pkg = {
     'postgresql-server': {
-        'installed': True,
+        'debian': 'postgresql',  # Different package name on Debian
     },
-    'postgresql-contrib': {
-        'installed': True,
-    }
+    'postgresql-contrib': {},
 }
 
 svc_systemd = {
@@ -12,33 +10,38 @@ svc_systemd = {
         'enabled': True,
         'running': True,
         'needs': [
-            'pkg_yum:postgresql-server',
-            'pkg_yum:postgresql-contrib',
+            'pkg:postgresql-server',
+            'pkg:postgresql-contrib',
         ]
     }
 }
 
-actions = {
-    'init_database': {
-        'command': 'postgresql-setup initdb',
-        'needs': [
-            'pkg_yum:postgresql-server',
-            'pkg_yum:postgresql-contrib',
-        ],
-        'triggers': [
-        ],
-        'unless': 'test -f /var/lib/pgsql/initdb.log',
-    },
-}
+if node.os in node.OS_FAMILY_REDHAT:
+    # Debian do this while install package
+    actions = {
+            'init_database': {
+                'command': 'postgresql-setup initdb',
+                'needs': [
+                    'pkg:postgresql-server',
+                    'pkg:postgresql-contrib',
+                  ],
+                'needs_by': [
+                    'postgres_roles:',
+                    'postgres_dbs:',
+                ],
+                'triggers': [
+                ],
+                'unless': 'test -f /var/lib/pgsql/initdb.log',
+            },
+    }
 
 postgres_roles = {}
 for role,config in node.metadata.get('postgresql', {}).get('role', {}).items():
     postgres_roles[role] = {
         'password': config.get('password', repo.vault.password_for('postgresql_{}_{}'.format(role, node.name))),
         'needs': [
-            'pkg_yum:postgresql-server',
-            'pkg_yum:postgresql-contrib',
-            'action:init_database',
+            'pkg:postgresql-server',
+            'pkg:postgresql-contrib',
             'svc_systemd:postgresql'
         ],
     }
@@ -48,9 +51,8 @@ for database,config in node.metadata.get('postgresql', {}).get('database',{}).it
     postgres_dbs[database] = {
         'owner': config.get('owner', database),
         'needs': [
-            'pkg_yum:postgresql-server',
-            'pkg_yum:postgresql-contrib',
-            'action:init_database',
+            'pkg:postgresql-server',
+            'pkg:postgresql-contrib',
             'svc_systemd:postgresql'
         ],
     }
