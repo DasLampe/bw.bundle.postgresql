@@ -24,8 +24,8 @@ if node.os in node.OS_FAMILY_REDHAT:
             'needs': [
                 'pkg:postgresql-server',
                 'pkg:postgresql-contrib',
-              ],
-            'needs_by': [
+            ],
+            'needed_by': [
                 'postgres_roles:',
                 'postgres_dbs:',
             ],
