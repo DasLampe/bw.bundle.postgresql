@@ -19,20 +19,20 @@ svc_systemd = {
 if node.os in node.OS_FAMILY_REDHAT:
     # Debian do this while install package
     actions = {
-            'init_database': {
-                'command': 'postgresql-setup initdb',
-                'needs': [
-                    'pkg:postgresql-server',
-                    'pkg:postgresql-contrib',
-                  ],
-                'needs_by': [
-                    'postgres_roles:',
-                    'postgres_dbs:',
-                ],
-                'triggers': [
-                ],
-                'unless': 'test -f /var/lib/pgsql/initdb.log',
-            },
+        'init_database': {
+            'command': 'postgresql-setup initdb',
+            'needs': [
+                'pkg:postgresql-server',
+                'pkg:postgresql-contrib',
+              ],
+            'needs_by': [
+                'postgres_roles:',
+                'postgres_dbs:',
+            ],
+            'triggers': [
+            ],
+            'unless': 'test -f /var/lib/pgsql/initdb.log',
+        },
     }
 
 postgres_roles = {}
