@@ -1,7 +1,4 @@
-# Bundle to install PostgreSQL on Debian or CentOs
-
-## Dependencies
-* pkg_wrapper: https://github.com/DasLampe/bw.item.pkg_wrapper
+# Bundle to install PostgreSQL on Debian
 
 ## Sample config
 ```python
