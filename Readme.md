@@ -1,3 +1,8 @@
+
+> [!IMPORTANT]
+> # DEPRECATED
+> Please use https://github.com/shorst/bw.bundle.postgres
+
 # Bundle to install PostgreSQL on Debian
 
 ## Sample config
